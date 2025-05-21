@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dinner Booking</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    .form-row {
+      margin-top: 20px;
+    }
+
+    label {
+      margin: 0 10px;
+    }
+
+    input[type="text"] {
+      padding: 5px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    input.error {
+      background-color: #ffd6d6;
+    }
+
+    input.valid {
+      background-color: white;
+    }
+
+    #submit {
+      margin-top: 20px;
+      padding: 8px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      background-color: #f2f2f2;
+      cursor: not-allowed;
+    }
+
+    #submit:enabled {
+      cursor: pointer;
+      background-color: #d4f4d7;
+    }
+
+    .message {
+      display: block;
+      margin-top: 10px;
+      color: red;
+      font-weight: bold;
+    }
+
+    .section {
+      margin-top: 30px;
+      text-align: left;
+      display: inline-block;
+    }
+
+    .section h3 {
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Booking your place for your dinner!</h1>
+
+  <form id="bookingForm">
+    <div class="form-row">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name">
+      <label for="phone">Phone Number</label>
+      <input type="text" id="phone" name="phone">
+    </div>
+
+    <span class="message" id="message">...</span>
+
+  <div style="margin-bottom: 20px;text-align: left;">
+  <h3>Select a time</h3>
+  <label><input type="radio" name="time" value="5:00" checked> 5:00</label><br>
+  <label><input type="radio" name="time" value="6:00"> 6:00</label><br>
+  <label><input type="radio" name="time" value="7:00"> 7:00</label><br>
+  <label><input type="radio" name="time" value="8:00"> 8:00</label>
+</div>
+
+<div style="clear: both; margin-top: 20px;text-align: left;">
+  <h3>What would you like to have with us?</h3>
+  <label><input type="checkbox" name="menu" value="Starters"> Starters</label><br>
+  <label><input type="checkbox" name="menu" value="Main Course"> Main Course</label><br>
+  <label><input type="checkbox" name="menu" value="Dessert"> Dessert</label><br>
+  <label><input type="checkbox" name="menu" value="Drinks"> Drinks</label>
+</div>
+
+
+
+    <div>
+      <button type="submit" id="submit" disabled>Submit</button>
+    </div>
+  </form>
+
+  <script>
+    const nameInput = document.getElementById("name");
+    const phoneInput = document.getElementById("phone");
+    const message = document.getElementById("message");
+    const submitBtn = document.getElementById("submit");
+
+    function validateInput() {
+      let nameVal = nameInput.value.trim();
+      let phoneVal = phoneInput.value.trim();
+      let nameIsValid = false;
+      let phoneIsValid = false;
+
+      // Validate Name
+      if (nameVal === "") {
+        message.textContent = "Error: Name is empty.";
+        nameInput.classList.add("error");
+        nameInput.classList.remove("valid");
+      } else if (!nameVal.includes(" ") || nameVal.split(" ").filter(Boolean).length < 2) {
+        message.textContent = "Error: First and last names are required";
+        nameInput.classList.add("error");
+        nameInput.classList.remove("valid");
+      } else {
+        nameInput.classList.remove("error");
+        nameInput.classList.add("valid");
+        nameIsValid = true;
+      }
+
+      // Validate Phone
+      const phoneRegex = /^[0-9][a-zA-Z0-9]{5}$/;
+      if (phoneVal === "") {
+        message.textContent = "Error: Phone number is empty.";
+        phoneInput.classList.add("error");
+        phoneInput.classList.remove("valid");
+      } else if (phoneVal.length !== 6) {
+        message.textContent = "Error. Phone numbers must have exactly 6 characters.";
+        phoneInput.classList.add("error");
+        phoneInput.classList.remove("valid");
+      } else if (!phoneRegex.test(phoneVal)) {
+        message.textContent = "Error: Phone number must start with numbers.";
+        phoneInput.classList.add("error");
+        phoneInput.classList.remove("valid");
+      } else {
+        phoneInput.classList.remove("error");
+        phoneInput.classList.add("valid");
+        phoneIsValid = true;
+      }
+
+      if (nameIsValid && phoneIsValid) {
+        message.textContent = "...";
+        submitBtn.disabled = false;
+      } else {
+        submitBtn.disabled = true;
+      }
+    }
+     nameInput.addEventListener("blur", validateInput);
+    phoneInput.addEventListener("blur", validateInput);
+
+    document.getElementById("bookingForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      alert("Form submitted successfully!");
+    });
+
+
+  </script>
+
+</body>
+</html>
